@@ -1,0 +1,88 @@
+
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+    <div class="app-brand demo">
+        <a href="/" class="app-brand-link">
+           
+            <img src="~/documents/logo/match-logo.jpg" alt="match-logo" style="width: 175px;">
+        </a>
+
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+        </a>
+    </div>
+
+    <div class="menu-inner-shadow"></div>
+
+    <ul class="menu-inner py-1" id="menu">
+        <!-- Accounts -->
+        <li class="menu-header small text-uppercase"><span class="menu-header-text">Hesap</span></li>
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                <div data-i18n="Hesap Ayarları">Hesap Ayarları</div>
+            </a>
+
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="/account/accountdetail" class="menu-link">
+                        <div data-i18n="Profilim">Profilim</div>
+                    </a>
+                </li>
+                @if (@User.FindFirst(ClaimTypes.Role)?.Value == "Admin")
+                {
+                    <li class="menu-item">
+                        <a href="/account/accountlist" class="menu-link">
+                            <div data-i18n="accountlist">Kullanıcılar</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/account/register" class="menu-link">
+                            <div data-i18n="Yeni Kullanıcı Hesabı">Yeni Kullanıcı Hesabı</div>
+                        </a>
+                    </li>
+                }
+                <li class="menu-item">
+                    <a href="/account/accountdetail" class="menu-link">
+                        <div data-i18n="Profilim">Profilim</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <!--Firma Performansı -->
+        <li class="menu-header small text-uppercase"><span class="menu-header-text">Firma Performansı</span></li>
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                <div data-i18n="Hesap Ayarları">Firma Genel Durum</div>
+            </a>
+
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="/GeneralSummary/GeneralSum" class="menu-link">
+                        <div data-i18n="Genel Durum">Genel Durum</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/GeneralSummary/FinancialStatements" class="menu-link">
+                        <div data-i18n="Özet Mali Tablolar">Özet Mali Tablolar</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/GeneralSummary/FinancialSummary" class="menu-link">
+                        <div data-i18n="Özet Finansallar">Özet Finansallar</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/GeneralSummary/StockIncomeExpenseSummary" class="menu-link">
+                        <div data-i18n="Stok Gelir -Gider Özetleri">Stok Gelir - Gider Özetleri</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/GeneralSummary/SalesPurchaseSummary" class="menu-link">
+                        <div data-i18n="Satış - Satınalma Özetleri">Satış - Satınalma Özetleri</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</aside>

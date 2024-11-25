@@ -1,0 +1,38 @@
+﻿@model List<UserViewModel>
+
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Hesap Ayarları /</span>Kullanıcılar</h4>
+<div class="card">
+    <h5 class="card-header">Portal Kullanıcıları</h5>
+    <div class="table-responsive text-nowrap">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Ad</th>
+                    <th>Soyad</th>
+                    <th>Telefon</th>
+                    <th>Email</th>
+                     <th>Yetki</th>
+                    <th>Durum</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+              @foreach (var user in Model)
+              {
+                <tr>
+                    <td>@user.Name</td>
+                    <td>@user.Surname</td>
+                    <td>@user.Phone</td>
+                    <td>@user.Email</td>
+                     <td>@user.OperationClaimName</td>
+                    <td><span class= "badge bg-label-@(user.Status==1 ? "success":"danger" )">@user.StatusName</span></td>
+                    <td>
+                        <a class="dropdown-item" href="/account/updateuser/@user.Id"><i
+                                class="bx bx-edit-alt me-1"></i>Düzenle</a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

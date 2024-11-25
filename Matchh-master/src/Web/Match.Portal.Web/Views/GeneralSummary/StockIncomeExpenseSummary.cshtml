@@ -1,0 +1,795 @@
+@using System.Text.Json
+@model StockIncomeExpenseSummaryModel
+
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Firma Genel Durum /</span> Stok Gelir -Gider Özetleri
+</h4>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <h5 class="card-header">Stok Gelir -Gider Özetleri</h5>
+            <!-- General Filter  behin-->
+            <hr class="my-0" />
+            <div class="card-body">
+                <div class="row">
+                    @using (Html.BeginForm("StockIncomeExpenseSummary", "GeneralSummary", FormMethod.Post))
+                    {
+                        <div class="row mb-4">
+
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="ReportTypeId">Rapor Tipi</label>
+                                    <select id="ReportTypeId" class="form-control select2" asp-for="ReportTypeId"
+                                        aria-label="ReportTypeId">
+                                        <option value="1">Yıllık</option>
+                                        <option value="2">Aylık</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="CariDonemDate" class="form-label">Cari Dönem</label>
+                                    <input class="form-control onlyMontPicker" type="text" name="CariDonemDate"
+                                        id="CariDonemDate" value="@Model.CariDonemDate" />
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <button type="submit" class="btn btn-primary me-2">Sorgula</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <!-- /General Filter end -->
+        </div>
+        <!-- Satışlar, Satış Miktarı, Maliyet, Kar begin -->
+        <div class="row">
+            <div class="col-xl-3 col-md-6 mb-4">
+                <!-- Dashboard Satışlar S04-E6-01-001-01 info widget 1-->
+                <div class="card border-start-lg border-start-primary h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1">
+                                <div class="small fw-bold text-secondary  mb-1">Satışlar</div>
+                                <div class="h5">
+                                    @Model.Sales
+                                    <svg xmlns="http://www.w3.org/2000/svg" style=" margin-bottom: 4px; " width="0.75em"
+                                        height="0.75em" viewBox="0 0 18 24">
+                                        <path fill="currentColor"
+                                            d="M4.488 0h2.411v6.2c2.434-.88 4.89-1.805 7.341-2.693V5.5c-2.454.88-4.889 1.775-7.341 2.655v1.027c2.451-.888 4.907-1.813 7.341-2.693v1.978c-2.433.905-4.894 1.78-7.341 2.67v10.277a9.526 9.526 0 0 0 7.53-5.681l.024-.062a9.315 9.315 0 0 0 .746-3.682v-.008h2.502v.38a12.025 12.025 0 0 1-1.279 5.052l.032-.069a12.318 12.318 0 0 1-2.676 3.536l-.009.008a11.83 11.83 0 0 1-8.023 3.117c-.443 0-.88-.024-1.311-.071l.053.005v-11.92c-1.506.53-2.99 1.083-4.488 1.62v-1.92c1.501-.548 3.006-1.091 4.488-1.658V9.042c-1.493.51-2.99 1.082-4.488 1.613v-1.91c1.491-.56 3.009-1.094 4.488-1.666z" />
+                                    </svg>
+                                </div>
+
+                            </div>
+                            <div class="ms-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" style="color: #0061f2;" width="4em" height="4em"
+                                    viewBox="0 0 48 48">
+                                    <rect width="35.557" height="28.446" x="6.221" y="14.054" fill="none"
+                                        stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" rx="4.399"
+                                        ry="4.399" />
+                                    <path fill="none" stroke="currentColor" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M6.221 18.453v-2.556a3.935 3.935 0 0 1 2.823-3.775l21.992-6.485A3.3 3.3 0 0 1 35.268 8.8v5.253" />
+                                    <circle cx="35.268" cy="28.277" r="2.749" fill="none" stroke="currentColor"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <!-- Dashboard Satış Miktarı S04-E6-01-001-04 info widget 2-->
+                <div class="card border-start-lg border-start-secondary h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1">
+                                <div class="small fw-bold text-secondary mb-1">Satış Miktarı</div>
+                                <div class="h5">
+                                    @Model.SalesQuantity
+                                    <svg xmlns="http://www.w3.org/2000/svg" style=" margin-bottom: 4px; " width="0.75em"
+                                        height="0.75em" viewBox="0 0 18 24">
+                                        <path fill="currentColor"
+                                            d="M4.488 0h2.411v6.2c2.434-.88 4.89-1.805 7.341-2.693V5.5c-2.454.88-4.889 1.775-7.341 2.655v1.027c2.451-.888 4.907-1.813 7.341-2.693v1.978c-2.433.905-4.894 1.78-7.341 2.67v10.277a9.526 9.526 0 0 0 7.53-5.681l.024-.062a9.315 9.315 0 0 0 .746-3.682v-.008h2.502v.38a12.025 12.025 0 0 1-1.279 5.052l.032-.069a12.318 12.318 0 0 1-2.676 3.536l-.009.008a11.83 11.83 0 0 1-8.023 3.117c-.443 0-.88-.024-1.311-.071l.053.005v-11.92c-1.506.53-2.99 1.083-4.488 1.62v-1.92c1.501-.548 3.006-1.091 4.488-1.658V9.042c-1.493.51-2.99 1.082-4.488 1.613v-1.91c1.491-.56 3.009-1.094 4.488-1.666z" />
+                                    </svg>
+
+                                </div>
+
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" style="color: #6900c7;" width="4em" height="4em"
+                                viewBox="0 0 48 48">
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    d="M4.5 11.5a3 3 0 0 1 3-3h8.718a4 4 0 0 1 2.325.745l4.914 3.51a4 4 0 0 0 2.325.745H40.5a3 3 0 0 1 3 3v20a3 3 0 0 1-3 3h-33a3 3 0 0 1-3-3zm25.406 23v-16M24 34.5V23.137M18.094 34.5v-6.727" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <!-- Dashboard Maliyet S04-E6-02-001-07 info widget 3-->
+                <div class="card border-start-lg border-start-success h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1">
+                                <div class="small fw-bold text-secondary  mb-1">Maliyet</div>
+                                <div class="h5">
+                                    @Model.Cost
+                                    <svg xmlns="http://www.w3.org/2000/svg" style=" margin-bottom: 4px; " width="0.75em"
+                                        height="0.75em" viewBox="0 0 18 24">
+                                        <path fill="currentColor"
+                                            d="M4.488 0h2.411v6.2c2.434-.88 4.89-1.805 7.341-2.693V5.5c-2.454.88-4.889 1.775-7.341 2.655v1.027c2.451-.888 4.907-1.813 7.341-2.693v1.978c-2.433.905-4.894 1.78-7.341 2.67v10.277a9.526 9.526 0 0 0 7.53-5.681l.024-.062a9.315 9.315 0 0 0 .746-3.682v-.008h2.502v.38a12.025 12.025 0 0 1-1.279 5.052l.032-.069a12.318 12.318 0 0 1-2.676 3.536l-.009.008a11.83 11.83 0 0 1-8.023 3.117c-.443 0-.88-.024-1.311-.071l.053.005v-11.92c-1.506.53-2.99 1.083-4.488 1.62v-1.92c1.501-.548 3.006-1.091 4.488-1.658V9.042c-1.493.51-2.99 1.082-4.488 1.613v-1.91c1.491-.56 3.009-1.094 4.488-1.666z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" style="color: #00ac69;" width="4em" height="4em"
+                                viewBox="0 0 24 24">
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    d="M5 15.747V18a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.253M12.202 13.5V5m3.344 6.15l-3.344 3.266l-3.344-3.266" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <!-- Dashboard Kar S04-E6-02-001-10 info widget 4-->
+                <div class="card border-start-lg border-start-info h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1">
+                                <div class="small fw-bold text-secondary  mb-1">Kar</div>
+                                <div class="h5">
+                                    @Model.Profit
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" style=" margin-bottom: 4px; " width="0.75em"
+                                        height="0.75em" viewBox="0 0 18 24">
+                                        <path fill="currentColor"
+                                            d="M4.488 0h2.411v6.2c2.434-.88 4.89-1.805 7.341-2.693V5.5c-2.454.88-4.889 1.775-7.341 2.655v1.027c2.451-.888 4.907-1.813 7.341-2.693v1.978c-2.433.905-4.894 1.78-7.341 2.67v10.277a9.526 9.526 0 0 0 7.53-5.681l.024-.062a9.315 9.315 0 0 0 .746-3.682v-.008h2.502v.38a12.025 12.025 0 0 1-1.279 5.052l.032-.069a12.318 12.318 0 0 1-2.676 3.536l-.009.008a11.83 11.83 0 0 1-8.023 3.117c-.443 0-.88-.024-1.311-.071l.053.005v-11.92c-1.506.53-2.99 1.083-4.488 1.62v-1.92c1.501-.548 3.006-1.091 4.488-1.658V9.042c-1.493.51-2.99 1.082-4.488 1.613v-1.91c1.491-.56 3.009-1.094 4.488-1.666z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" style="color: #00cfd5;" width="4em" height="4em"
+                                viewBox="0 0 256 256">
+                                <path fill="currentColor"
+                                    d="M116 216a4 4 0 0 1-4 4H48a4 4 0 0 1-4-4V40a4 4 0 0 1 4-4h64a4 4 0 0 1 0 8H52v168h60a4 4 0 0 1 4 4m110.83-90.83l-40-40a4 4 0 0 0-5.66 5.66L214.34 124H112a4 4 0 0 0 0 8h102.34l-33.17 33.17a4 4 0 0 0 5.66 5.66l40-40a4 4 0 0 0 0-5.66" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Satışlar, Satış Miktarı, Maliyet, Kar end -->
+        <!-- STOK GRUPLARI start -->
+        <div class="row">
+            <div class="col-md-7 col-lg-7 order-2 mb-4">
+                <div class="card h-100">
+                    <h5 class="card-header">Özet Varlık Durumu</h5>
+                    <div class="table-responsive text-nowrap">
+                        <table class="table table-striped" style="font-size:14px">
+                            <thead>
+                                <tr>
+                                    <th>Stok</th>
+                                    <th>Satış</th>
+                                    <th>Miktar</th>
+                                    <th>Maliyet</th>
+                                    <th>Kar</th>
+                                    <th>Kalan Miktar</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+                                @foreach (var b in Model.StockGroup)
+                                {
+                                    <tr>
+                                        <td>
+                                            @b.GroupName
+                                        </td>
+                                        <td>
+                                            @b.Sales
+                                        </td>
+                                        <td>
+                                            @b.SalesQuantity
+                                        </td>
+                                        <td>
+                                            @b.Cost
+                                        </td>
+                                        <td>
+                                            @b.Profit
+                                        </td>
+                                        <td>
+                                            @b.RemainingAmount
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5 col-lg-5 order-2 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0 me-2">Varlıklar</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-S04-E6-02-001-18"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /STOK GRUPLARI end -->
+        <!-- Ürün Satış,Ürün Maliyet,DEPO-ŞUBE SATIŞLARI charts start -->
+        <div class="row">
+            <div class="col-md-4 col-lg-4 order-2 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0 me-2">Ürün Satış</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-S04-E6-03-001-19"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-4 order-2 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0 me-2">Ürün Maliyet</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-S04-E6-03-001-20"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-4 order-2 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0 me-2">DEPO-ŞUBE SATIŞLARI</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-S04-E6-04-001-21"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Ürün Satış,Ürün Maliyet,DEPO-ŞUBE SATIŞLARI charts end -->
+
+        <!-- Hizmet Satışları, Diğer Gelirler, Faaliyet Giderleri, Net Kar begin -->
+        <div class="row">
+            <div class="col-xl-3 col-md-6 mb-4">
+                <!--Satışlar S04-E6-04-001-24 info widget 1-->
+                <div class="card border-start-lg border-start-primary h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1">
+                                <div class="small fw-bold text-secondary  mb-1">Hizmet Satışları</div>
+                                <div class="h5">
+                                    @Model.ServiceSales
+                                    <svg xmlns="http://www.w3.org/2000/svg" style=" margin-bottom: 4px; " width="0.75em"
+                                        height="0.75em" viewBox="0 0 18 24">
+                                        <path fill="currentColor"
+                                            d="M4.488 0h2.411v6.2c2.434-.88 4.89-1.805 7.341-2.693V5.5c-2.454.88-4.889 1.775-7.341 2.655v1.027c2.451-.888 4.907-1.813 7.341-2.693v1.978c-2.433.905-4.894 1.78-7.341 2.67v10.277a9.526 9.526 0 0 0 7.53-5.681l.024-.062a9.315 9.315 0 0 0 .746-3.682v-.008h2.502v.38a12.025 12.025 0 0 1-1.279 5.052l.032-.069a12.318 12.318 0 0 1-2.676 3.536l-.009.008a11.83 11.83 0 0 1-8.023 3.117c-.443 0-.88-.024-1.311-.071l.053.005v-11.92c-1.506.53-2.99 1.083-4.488 1.62v-1.92c1.501-.548 3.006-1.091 4.488-1.658V9.042c-1.493.51-2.99 1.082-4.488 1.613v-1.91c1.491-.56 3.009-1.094 4.488-1.666z" />
+                                    </svg>
+                                </div>
+
+                            </div>
+                            <div class="ms-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" style="color: #0061f2;" width="4em" height="4em"
+                                    viewBox="0 0 48 48">
+                                    <rect width="35.557" height="28.446" x="6.221" y="14.054" fill="none"
+                                        stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" rx="4.399"
+                                        ry="4.399" />
+                                    <path fill="none" stroke="currentColor" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M6.221 18.453v-2.556a3.935 3.935 0 0 1 2.823-3.775l21.992-6.485A3.3 3.3 0 0 1 35.268 8.8v5.253" />
+                                    <circle cx="35.268" cy="28.277" r="2.749" fill="none" stroke="currentColor"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <!-- Diğer Gelirler S04-E6-04-001-27 info widget 2-->
+                <div class="card border-start-lg border-start-secondary h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1">
+                                <div class="small fw-bold text-secondary mb-1">Diğer Gelirler</div>
+                                <div class="h5">
+                                    @Model.OtherProfits
+                                    <svg xmlns="http://www.w3.org/2000/svg" style=" margin-bottom: 4px; " width="0.75em"
+                                        height="0.75em" viewBox="0 0 18 24">
+                                        <path fill="currentColor"
+                                            d="M4.488 0h2.411v6.2c2.434-.88 4.89-1.805 7.341-2.693V5.5c-2.454.88-4.889 1.775-7.341 2.655v1.027c2.451-.888 4.907-1.813 7.341-2.693v1.978c-2.433.905-4.894 1.78-7.341 2.67v10.277a9.526 9.526 0 0 0 7.53-5.681l.024-.062a9.315 9.315 0 0 0 .746-3.682v-.008h2.502v.38a12.025 12.025 0 0 1-1.279 5.052l.032-.069a12.318 12.318 0 0 1-2.676 3.536l-.009.008a11.83 11.83 0 0 1-8.023 3.117c-.443 0-.88-.024-1.311-.071l.053.005v-11.92c-1.506.53-2.99 1.083-4.488 1.62v-1.92c1.501-.548 3.006-1.091 4.488-1.658V9.042c-1.493.51-2.99 1.082-4.488 1.613v-1.91c1.491-.56 3.009-1.094 4.488-1.666z" />
+                                    </svg>
+
+                                </div>
+
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" style="color: #6900c7;" width="4em" height="4em"
+                                viewBox="0 0 48 48">
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    d="M4.5 11.5a3 3 0 0 1 3-3h8.718a4 4 0 0 1 2.325.745l4.914 3.51a4 4 0 0 0 2.325.745H40.5a3 3 0 0 1 3 3v20a3 3 0 0 1-3 3h-33a3 3 0 0 1-3-3zm25.406 23v-16M24 34.5V23.137M18.094 34.5v-6.727" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <!-- Faaliyet Giderleri S04-E6-04-001-30 info widget 3-->
+                <div class="card border-start-lg border-start-success h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1">
+                                <div class="small fw-bold text-secondary  mb-1">Faaliyet Giderleri</div>
+                                <div class="h5">
+                                    @Model.FinancialExpenses
+                                    <svg xmlns="http://www.w3.org/2000/svg" style=" margin-bottom: 4px; " width="0.75em"
+                                        height="0.75em" viewBox="0 0 18 24">
+                                        <path fill="currentColor"
+                                            d="M4.488 0h2.411v6.2c2.434-.88 4.89-1.805 7.341-2.693V5.5c-2.454.88-4.889 1.775-7.341 2.655v1.027c2.451-.888 4.907-1.813 7.341-2.693v1.978c-2.433.905-4.894 1.78-7.341 2.67v10.277a9.526 9.526 0 0 0 7.53-5.681l.024-.062a9.315 9.315 0 0 0 .746-3.682v-.008h2.502v.38a12.025 12.025 0 0 1-1.279 5.052l.032-.069a12.318 12.318 0 0 1-2.676 3.536l-.009.008a11.83 11.83 0 0 1-8.023 3.117c-.443 0-.88-.024-1.311-.071l.053.005v-11.92c-1.506.53-2.99 1.083-4.488 1.62v-1.92c1.501-.548 3.006-1.091 4.488-1.658V9.042c-1.493.51-2.99 1.082-4.488 1.613v-1.91c1.491-.56 3.009-1.094 4.488-1.666z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" style="color: #00ac69;" width="4em" height="4em"
+                                viewBox="0 0 24 24">
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    d="M5 15.747V18a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.253M12.202 13.5V5m3.344 6.15l-3.344 3.266l-3.344-3.266" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <!-- Net Kar S04-E6-04-001-33 info widget 4-->
+                <div class="card border-start-lg border-start-info h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 col-md-6">
+                                <div class="small fw-bold text-secondary mb-1">Net Kar</div>
+                                <div class="h5">
+                                    @Model.NetProfitPrice
+                                    <svg xmlns="http://www.w3.org/2000/svg" style=" margin-bottom: 4px; " width="0.75em"
+                                        height="0.75em" viewBox="0 0 18 24">
+                                        <path fill="currentColor"
+                                            d="M4.488 0h2.411v6.2c2.434-.88 4.89-1.805 7.341-2.693V5.5c-2.454.88-4.889 1.775-7.341 2.655v1.027c2.451-.888 4.907-1.813 7.341-2.693v1.978c-2.433.905-4.894 1.78-7.341 2.67v10.277a9.526 9.526 0 0 0 7.53-5.681l.024-.062a9.315 9.315 0 0 0 .746-3.682v-.008h2.502v.38a12.025 12.025 0 0 1-1.279 5.052l.032-.069a12.318 12.318 0 0 1-2.676 3.536l-.009.008a11.83 11.83 0 0 1-8.023 3.117c-.443 0-.88-.024-1.311-.071l.053.005v-11.92c-1.506.53-2.99 1.083-4.488 1.62v-1.92c1.501-.548 3.006-1.091 4.488-1.658V9.042c-1.493.51-2.99 1.082-4.488 1.613v-1.91c1.491-.56 3.009-1.094 4.488-1.666z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div style="width:120px" id="chart-S04-E6-04-001-36"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Hizmet Satışları, Diğer Gelirler, Faaliyet Giderleri, Net Kar end -->
+        <!-- STOK GRUPLARI start -->
+        <div class="row">
+            <div class="col-md-7 col-lg-7 order-2 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0 me-2">Hizmet Satışları Grafiği</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-S04-E6-01-001-37"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 col-lg-5 order-2 mb-4">
+                <div class="card h-100">
+                    <div class="row">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h5 class="card-title m-0 me-2">Gelir-Gider-Kar Grafiği</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="chart-S04-E6-06-001-47"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h5 class="card-title m-0 me-2">Toplam Satışlar Dağılımı Stok-Hizmet</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="chart-S04-E6-01-001-51"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /STOK GRUPLARI end -->
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            //STOK GRUPLARI begin
+            var options0200118 = {
+                chart: {
+                    type: 'line',
+                    height: 350
+                },
+                series: @Html.Raw(JsonSerializer.Serialize(Model.StockGroupChartData)) ?? [],
+                xaxis: {
+                    categories: ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Agu', 'Eyl', 'Eki', 'Kas', 'Ara']
+                },
+                stroke: {
+                    curve: 'smooth' // Çizgilerin yumuşatılması
+                },
+                markers: {
+                    size: 5 // Her veri noktası için işaretçi boyutu
+                },
+                colors: ['#1E88E5', '#E53935', '#43A047'],
+                tooltip: {
+                    shared: true,
+                    intersect: false,
+                    y: {
+                        formatter: function (val) {
+                            return val.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')  // Tooltip etiketlerini formatlar
+                        }
+                    }
+                },
+                yaxis: {
+                    labels: {
+                        formatter: function (value) {
+                            return value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'); // Tooltip etiketlerini formatlar
+                        }
+                    },
+                },
+            };
+
+            var chart0200118 = new ApexCharts(document.querySelector("#chart-S04-E6-02-001-18"), options0200118);
+            chart0200118.render();
+
+            //STOK GRUPLARI end
+
+            //Ürün Satış,Ürün Maliyet,DEPO-ŞUBE SATIŞLARI charts begin
+
+            var options0300119 = {
+                series: @Html.Raw(JsonSerializer.Serialize(Model.ProductSalesChartData.Data)) ?? [],
+                chart: {
+                    type: 'donut',
+                },
+                labels: @Html.Raw(JsonSerializer.Serialize(Model.ProductSalesChartData.Name)) ?? [],
+                legend: {
+                    position: 'bottom',  // Etiketlerin grafiğin altında yer alması için
+                    horizontalAlign: 'center',
+                },
+                 colors: ['#1E88E5', '#E53935', '#43A047'],
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            };
+
+            var chart0300119 = new ApexCharts(document.querySelector("#chart-S04-E6-03-001-19"), options0300119);
+            chart0300119.render();
+            //#### 2
+            var options0300120 = {
+                series: @Html.Raw(JsonSerializer.Serialize(Model.ProductCostChartData.Data)) ?? [],
+                chart: {
+                    type: 'pie',
+                },
+                labels: @Html.Raw(JsonSerializer.Serialize(Model.ProductCostChartData.Name)) ?? [],
+                legend: {
+                    position: 'bottom',  // Etiketlerin grafiğin altında yer alması için
+                    horizontalAlign: 'center',
+                },
+                colors: ['#0061f2','#00cfd5','#00ac69'],
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            };
+
+            var chart0300120 = new ApexCharts(document.querySelector("#chart-S04-E6-03-001-20"), options0300120);
+            chart0300120.render();
+            //####
+            //### 3
+            const warehouseData = @Html.Raw(JsonSerializer.Serialize(Model.WarehouseBranchSalesChartData)) ?? []
+            // Minimum değer
+            let minValue = 5;
+
+            let normalizedData = warehouseData.map(value => {
+                return value.Percentage < minValue ? minValue : value.Percentage;
+            });
+
+            const options0400121_ = {
+                series: normalizedData,
+                chart: {
+                    height: 350,
+                    type: 'radialBar',
+                },
+                plotOptions: {
+                    radialBar: {
+                        dataLabels: {
+                            name: {
+                                fontSize: '22px',
+                            },
+                            value: {
+                                fontSize: '16px',
+                                formatter: function (val) {
+                                    // Normalleştirilen değeri orijinal değeriyle değiştir
+                                    return warehouseData[normalizedData.indexOf(parseInt(val))]?.Percentage + '%';
+                                }
+                            },
+                            total: {
+                                show: true,
+                                label: 'Toplam',
+                                formatter: function (w) {
+                                    // Toplam satış yüzdesini hesaplama
+                                    return warehouseData.map(data => data.Percentage).reduce((a, b) => a + b, 0) + '%';
+
+                                }
+                            }
+                        }
+                    }
+                },
+                colors: ['#0061f2','#6900c7','#00cfd5','#00ac69'],
+                yaxis: {
+                    min: 5, // Minimum değeri ayarlayın
+                },
+                labels: warehouseData.map(data => data.Name),
+                tooltip: {
+                    enabled: true,
+                    custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+                        const warehouse = warehouseData[seriesIndex];
+                        return (
+                            '<div class="card-body">' +
+                            '<span>' + warehouse.Name + '</span><br>' +
+                            '<span> ' + warehouse.Percentage + '%</span><br>' +
+                            '<span>Miktar: ' + warehouse.Sales.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + '</span>' +
+                            '</div>'
+                        );
+                    }
+                },
+            };
+
+
+            const chart0400121 = new ApexCharts(document.querySelector("#chart-S04-E6-04-001-21"), options0400121_);
+            chart0400121.render();
+
+            //Ürün Satış,Ürün Maliyet,DEPO-ŞUBE SATIŞLARI charts  end
+            //Net Kar chart begin
+            var options0400136 = {
+                chart: {
+                    type: 'radialBar',
+                    height: 150,
+                },
+                series: [@Html.Raw(JsonSerializer.Serialize(Model.NetProfitPercent))],
+                plotOptions: {
+                    radialBar: {
+                        hollow: {
+                            size: '55%'
+                        },
+                        dataLabels: {
+                            name: {
+                                show: false
+                            },
+                            value: {
+                                show: true,
+                                fontSize: '15px',
+                                offsetY: 10,
+                                formatter: function (val) {
+                                    return val + "%";
+                                }
+                            }
+                        }
+                    }
+                },
+                colors: ['#1E88E5'],
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shade: 'dark',
+                        type: 'horizontal',
+                        shadeIntensity: 0.5,
+                        gradientToColors: ['#1E88E5'],
+                        inverseColors: false,
+                        opacityFrom: 1,
+                        opacityTo: 1,
+                        stops: [0, 100]
+                    }
+                },
+                labels: ['Growth'],
+                legend: {
+                    show: false
+                },
+                tooltip: {
+                    enabled: false
+                }
+            };
+
+            var chart0400136 = new ApexCharts(document.querySelector("#chart-S04-E6-04-001-36"), options0400136);
+            chart0400136.render();
+
+            //Net Kar chart End
+            //Hizmet Satışları Grafiği begin
+            var options0100137 = {
+                chart: {
+                    type: 'line',
+                    height: 350
+                },
+                series: @Html.Raw(JsonSerializer.Serialize(Model.ServiceSalesMonthChartData)) ?? [],
+                xaxis: {
+                    categories: ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Agu', 'Eyl', 'Eki', 'Kas', 'Ara']
+                },
+                stroke: {
+                    curve: 'smooth' // Çizgilerin yumuşatılması
+                },
+                markers: {
+                    size: 5 // Her veri noktası için işaretçi boyutu
+                },
+                colors: ['#0061f2','#6900c7','#00cfd5','#00ac69'],
+                tooltip: {
+                    shared: true,
+                    intersect: false,
+                    y: {
+                        formatter: function (val) {
+                            return val.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')  // Tooltip etiketlerini formatlar
+                        }
+                    }
+                },
+                yaxis: {
+                    labels: {
+                        formatter: function (value) {
+                            return value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'); // Tooltip etiketlerini formatlar
+                        }
+                    },
+                },
+            };
+
+            var chart0100137 = new ApexCharts(document.querySelector("#chart-S04-E6-01-001-37"), options0100137);
+            chart0100137.render();
+
+            //Hizmet Satışları Grafiği end
+
+            //gelir gider Kar begin
+            var option0600147 = {
+                chart: {
+                    type: 'bar',
+                    height: 150,
+                    toolbar: {
+                        show: false
+                    },
+                    sparkline: {
+                        enabled: false
+                    }
+                },
+                series: [{
+                    name: '',
+                    data: @Html.Raw(JsonSerializer.Serialize(Model.GelirGiderKarChartData?.Data)) ?? [], // Gelir, Gider ve Kar verileri
+                }],
+                plotOptions: {
+                    bar: {
+                        horizontal: true, // Yatay barlı grafik
+                        distributed: true, // Her barın farklı renkte olması için
+                        borderRadius: 6,
+                        barHeight: '33%', // Bar kalınlığını inceltmek için %25 ayarlandı
+                        dataLabels: {
+                            enabled: false // Barların üzerinde rakam gösterilmez
+                        }
+                    }
+                },
+                colors: ['#1E88E5', '#E53935', '#43A047'], // Gelir: Mavi, Gider: Kırmızı, Kar: Yeşil
+                xaxis: {
+                    max: Math.max(...(@Html.Raw(JsonSerializer.Serialize(Model.GelirGiderKarChartData?.Data)) ?? [])), // Maksimum değer
+                    min: Math.min(...(@Html.Raw(JsonSerializer.Serialize(Model.GelirGiderKarChartData?.Data)) ?? [])), // Minimum değer (negatif gider için)
+                    categories: @Html.Raw(JsonSerializer.Serialize(Model.GelirGiderKarChartData?.Name)) ?? [], // Kategoriler
+                },
+                yaxis: {
+                    show: false // Y eksenini ve değerlerini gizler
+                },
+                grid: {
+                    show: false // Arka plan ızgarası görünmesin
+                },
+                tooltip: {
+                    enabled: true,
+                    y: {
+                        formatter: function (val, opts) {
+                            const category = opts.w.globals.labels[opts.dataPointIndex]; // Tooltip'te başlık ve değer gösterimi
+                            return category + ": " + val.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + " ₺"; // Başlık ve fiyat gösterir
+                        }
+                    }
+                },
+                dataLabels: {
+                    enabled: false // Barlar üzerinde veri gösterilmeyecek
+                }
+            };
+
+            var chart0600147 = new ApexCharts(document.querySelector("#chart-S04-E6-06-001-47"), option0600147);
+            chart0600147.render();
+
+            //gelir gider kar end
+
+            //Toplam Satışlar Dağılımı Stok-Hizmet  begin
+
+
+            var originalData = @Html.Raw(JsonSerializer.Serialize(Model.ToplamSatislarDagilimiChartData?.Data)); // Orijinal veriler
+            var minVal0100151 = Math.min(...originalData);
+            var maxVal0100151 = Math.max(...originalData);
+            var minBarValue = maxVal0100151 / 70; // Küçük değerler için minimum görünürlük sınırı
+
+            // Minimum bar uzunluğu eklemek için küçük değerleri kontrol ederiz
+            var modifiedData = originalData.map(val => val < minBarValue ? minBarValue : val);
+
+            var option0100151 = {
+                chart: {
+                    type: 'bar',
+                    height: 150,
+                    toolbar: {
+                        show: false
+                    },
+                    sparkline: {
+                        enabled: false
+                    }
+                },
+                series: [{
+                    name: '',
+                    data: modifiedData ?? [], // Değerler, küçük olanları minimum bar uzunluğu ile değiştirilmiş
+                }],
+                plotOptions: {
+                    bar: {
+                        horizontal: true, // Yatay barlı grafik
+                        distributed: true, // Her barın farklı renkte olması için
+                        borderRadius: 6,
+                        barHeight: '33%', // Bar kalınlığını inceltmek için %33 ayarlandı
+                        dataLabels: {
+                            enabled: false // Barların üzerinde rakam gösterilmez
+                        }
+                    }
+                },
+                colors: ['#1E88E5', '#E53935', '#43A047'], // Hizmet: Mavi, Stok Satış: Kırmızı, T-Satış: Yeşil
+                xaxis: {
+                    max: Math.max(...modifiedData), // Maksimum değer, modifiye edilmiş veri kullanılır
+                    categories: @Html.Raw(JsonSerializer.Serialize(Model.ToplamSatislarDagilimiChartData?.Name)) ?? [], // Kategoriler
+                    forceNiceScale: true // Küçük değerler için uygun ölçeklendirme
+                },
+                yaxis: {
+                    show: false // Y eksenini ve değerlerini gizler
+                },
+                grid: {
+                    show: false // Arka plan ızgarası görünmesin
+                },
+                tooltip: {
+                    enabled: true,
+                    y: {
+                        formatter: function (val, opts) {
+                            const category = opts.w.globals.labels[opts.dataPointIndex]; // Tooltip'te başlık ve değer gösterimi
+                            // Eğer veri küçükse, gerçek değeri tooltip'te göstermek için orijinal veriyi kullanıyoruz
+                            var realValue = originalData[opts.dataPointIndex];
+                            return category + ": " + realValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + " ₺"; // Başlık ve fiyat gösterir
+                        }
+                    }
+                },
+                dataLabels: {
+                    enabled: false // Barlar üzerinde veri gösterilmeyecek
+                },
+                fill: {
+                    type: 'solid',
+                    colors: ['#1E88E5', '#E53935', '#43A047'],
+                    opacity: 1
+                }
+            };
+
+            var chart0100151 = new ApexCharts(document.querySelector("#chart-S04-E6-01-001-51"), option0100151);
+            chart0100151.render();
+
+            //Toplam Satışlar Dağılımı Stok-Hizmet  end
+
+        });
+
+    </script>
+
+}

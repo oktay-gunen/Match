@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Match.DataAccess\Match.DataAccess.csproj" />
+    <ProjectReference Include="..\Match.Entities\Match.Entities.csproj" />
+    <ProjectReference Include="..\Match.Core\Match.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Constants\Enums\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Constants\Enums\" />
+  </ItemGroup>
+</Project>

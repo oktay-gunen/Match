@@ -1,0 +1,1020 @@
+@using System.Text.Json
+@model SalesPurchaseSummaryModel
+
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Firma Genel Durum /</span> Satış - Satınalma Özetleri
+</h4>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <h5 class="card-header">Satış - Satınalma Özetleri</h5>
+            <!-- General Filter  behin-->
+            <hr class="my-0" />
+            <div class="card-body">
+                <div class="row">
+                    @using (Html.BeginForm("StockIncomeExpenseSummary", "GeneralSummary", FormMethod.Post))
+                    {
+                        <div class="row mb-4">
+
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="ReportTypeId">Rapor Tipi</label>
+                                    <select id="ReportTypeId" class="form-control select2" asp-for="ReportTypeId"
+                                        aria-label="ReportTypeId">
+                                        <option value="1">Yıllık</option>
+                                        <option value="2">Aylık</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="CariDonemDate" class="form-label">Cari Dönem</label>
+                                    <input class="form-control onlyMontPicker" type="text" name="CariDonemDate"
+                                        id="CariDonemDate" value="@Model.CariDonemDate" />
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <button type="submit" class="btn btn-primary me-2">Sorgula</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <!-- /General Filter end -->
+        </div>
+        <!-- Toplam Satışlar, Satış Vergi Tutarı, Müşteri Sayısı, Ortalama Vade begin -->
+        <div class="row">
+            <div class="col-xl-3 col-md-6 mb-4">
+                <!--Toplam Satışlar  info widget 1-->
+                <div class="card border-start-lg border-start-info h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 col-md-7">
+                                <div class="small fw-bold text-secondary mb-1">Toplam Satışlar </div>
+                                <div class="h5">
+                                    @Model.TotalSalesPrice
+                                    <svg xmlns="http://www.w3.org/2000/svg" style=" margin-bottom: 4px; " width="0.75em"
+                                        height="0.75em" viewBox="0 0 18 24">
+                                        <path fill="currentColor"
+                                            d="M4.488 0h2.411v6.2c2.434-.88 4.89-1.805 7.341-2.693V5.5c-2.454.88-4.889 1.775-7.341 2.655v1.027c2.451-.888 4.907-1.813 7.341-2.693v1.978c-2.433.905-4.894 1.78-7.341 2.67v10.277a9.526 9.526 0 0 0 7.53-5.681l.024-.062a9.315 9.315 0 0 0 .746-3.682v-.008h2.502v.38a12.025 12.025 0 0 1-1.279 5.052l.032-.069a12.318 12.318 0 0 1-2.676 3.536l-.009.008a11.83 11.83 0 0 1-8.023 3.117c-.443 0-.88-.024-1.311-.071l.053.005v-11.92c-1.506.53-2.99 1.083-4.488 1.62v-1.92c1.501-.548 3.006-1.091 4.488-1.658V9.042c-1.493.51-2.99 1.082-4.488 1.613v-1.91c1.491-.56 3.009-1.094 4.488-1.666z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div id="chart-S05-E6-01-001-05"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <!--  Satış Vergi Tutarı info widget 2-->
+                <div class="card border-start-lg border-start-info h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 col-md-7">
+                                <div class="small fw-bold text-secondary mb-1">Satış Vergi Tutarı</div>
+                                <div class="h5">
+                                    @Model.SalesTaxPrice
+                                    <svg xmlns="http://www.w3.org/2000/svg" style=" margin-bottom: 4px; " width="0.75em"
+                                        height="0.75em" viewBox="0 0 18 24">
+                                        <path fill="currentColor"
+                                            d="M4.488 0h2.411v6.2c2.434-.88 4.89-1.805 7.341-2.693V5.5c-2.454.88-4.889 1.775-7.341 2.655v1.027c2.451-.888 4.907-1.813 7.341-2.693v1.978c-2.433.905-4.894 1.78-7.341 2.67v10.277a9.526 9.526 0 0 0 7.53-5.681l.024-.062a9.315 9.315 0 0 0 .746-3.682v-.008h2.502v.38a12.025 12.025 0 0 1-1.279 5.052l.032-.069a12.318 12.318 0 0 1-2.676 3.536l-.009.008a11.83 11.83 0 0 1-8.023 3.117c-.443 0-.88-.024-1.311-.071l.053.005v-11.92c-1.506.53-2.99 1.083-4.488 1.62v-1.92c1.501-.548 3.006-1.091 4.488-1.658V9.042c-1.493.51-2.99 1.082-4.488 1.613v-1.91c1.491-.56 3.009-1.094 4.488-1.666z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div id="chart-S05-E6-01-001-10"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <!-- Müşteri Sayısı info widget 3-->
+                <div class="card border-start-lg border-start-info h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 col-md-7">
+                                <div class="small fw-bold text-secondary mb-1">Müşteri Sayısı</div>
+                                <div class="h5">
+                                    @Model.CustomerCount
+                                </div>
+                            </div>
+                            <div id="chart-S05-E6-02-001-15"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <!-- Ortalama Vad info widget 4-->
+                <div class="card border-start-lg border-start-success h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1">
+                                <div class="small fw-bold text-secondary  mb-1">Ortalama Vade</div>
+                                <div class="h5">
+                                    @Model.AverageMaturity
+
+                                </div>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" style="color: #00ac69;" width="4em" height="4em"
+                                viewBox="0 0 24 24">
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    d="M5 15.747V18a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.253M12.202 13.5V5m3.344 6.15l-3.344 3.266l-3.344-3.266" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Toplam Satışlar, Satış Vergi Tutarı, Müşteri Sayısı, Ortalama Vade end -->
+        <!-- Satış Tutar Müşteri Sayısı Grafiği begin-->
+        <div class="row">
+            <div class="col-md-12 col-lg-12 order-2 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0 me-2">Satış Tutar Müşteri Sayısı Grafiği</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-S05-E6-01-001-20"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-6 order-2 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0 me-2">En Çok Satış Yapılan Müşteriler</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-S05-E6-02-001-24"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6 order-2 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0 me-2">Vadeli - Peşin Satış</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-S05-E6-02-001-28"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/Satış Tutar Müşteri Sayısı Grafiği end -->
+        <!-- Toplam Alışlar, Alış Vergi Tutarı, Tedarikçi Sayısı, Ortalama Vade begin -->
+        <div class="row">
+            <div class="col-xl-3 col-md-6 mb-4">
+                <!--Toplam Alışlar info widget 1-->
+                <div class="card border-start-lg border-start-info h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 col-md-7">
+                                <div class="small fw-bold text-secondary mb-1">Toplam Alışlar</div>
+                                <div class="h5">
+                                    @Model.TotalBuyPrice
+                                    <svg xmlns="http://www.w3.org/2000/svg" style=" margin-bottom: 4px; " width="0.75em"
+                                        height="0.75em" viewBox="0 0 18 24">
+                                        <path fill="currentColor"
+                                            d="M4.488 0h2.411v6.2c2.434-.88 4.89-1.805 7.341-2.693V5.5c-2.454.88-4.889 1.775-7.341 2.655v1.027c2.451-.888 4.907-1.813 7.341-2.693v1.978c-2.433.905-4.894 1.78-7.341 2.67v10.277a9.526 9.526 0 0 0 7.53-5.681l.024-.062a9.315 9.315 0 0 0 .746-3.682v-.008h2.502v.38a12.025 12.025 0 0 1-1.279 5.052l.032-.069a12.318 12.318 0 0 1-2.676 3.536l-.009.008a11.83 11.83 0 0 1-8.023 3.117c-.443 0-.88-.024-1.311-.071l.053.005v-11.92c-1.506.53-2.99 1.083-4.488 1.62v-1.92c1.501-.548 3.006-1.091 4.488-1.658V9.042c-1.493.51-2.99 1.082-4.488 1.613v-1.91c1.491-.56 3.009-1.094 4.488-1.666z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div id="chart-S05-E6-03-002-05"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <!-- Alış Vergi Tutarı info widget 2-->
+                <div class="card border-start-lg border-start-info h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 col-md-7">
+                                <div class="small fw-bold text-secondary mb-1">Alış Vergi Tutarı</div>
+                                <div class="h5">
+                                    @Model.BuyTaxPrice
+                                    <svg xmlns="http://www.w3.org/2000/svg" style=" margin-bottom: 4px; " width="0.75em"
+                                        height="0.75em" viewBox="0 0 18 24">
+                                        <path fill="currentColor"
+                                            d="M4.488 0h2.411v6.2c2.434-.88 4.89-1.805 7.341-2.693V5.5c-2.454.88-4.889 1.775-7.341 2.655v1.027c2.451-.888 4.907-1.813 7.341-2.693v1.978c-2.433.905-4.894 1.78-7.341 2.67v10.277a9.526 9.526 0 0 0 7.53-5.681l.024-.062a9.315 9.315 0 0 0 .746-3.682v-.008h2.502v.38a12.025 12.025 0 0 1-1.279 5.052l.032-.069a12.318 12.318 0 0 1-2.676 3.536l-.009.008a11.83 11.83 0 0 1-8.023 3.117c-.443 0-.88-.024-1.311-.071l.053.005v-11.92c-1.506.53-2.99 1.083-4.488 1.62v-1.92c1.501-.548 3.006-1.091 4.488-1.658V9.042c-1.493.51-2.99 1.082-4.488 1.613v-1.91c1.491-.56 3.009-1.094 4.488-1.666z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div id="chart-S05-E6-03-002-10"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <!-- Tedarikçi Sayısı info widget 3-->
+                <div class="card border-start-lg border-start-info h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 col-md-7">
+                                <div class="small fw-bold text-secondary mb-1">Tedarikçi Sayısı</div>
+                                <div class="h5">
+                                    @Model.SuppliersCount
+                                </div>
+                            </div>
+                            <div id="chart-S05-E6-04-002-15"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <!-- Ortalama Vad info widget 4-->
+                <div class="card border-start-lg border-start-success h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1">
+                                <div class="small fw-bold text-secondary  mb-1">Ortalama Vade</div>
+                                <div class="h5">
+                                    @Model.BuyAverageMaturity
+
+                                </div>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" style="color: #00ac69;" width="4em" height="4em"
+                                viewBox="0 0 24 24">
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    d="M5 15.747V18a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.253M12.202 13.5V5m3.344 6.15l-3.344 3.266l-3.344-3.266" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Toplam Alışlar, Alış Vergi Tutarı, Tedarikçi Sayısı, Ortalama Vade end -->
+
+        <!-- Alış Tutarı Tedarikçi Sayısı Grafiği, En Çok Alış Yapılan Tedarikçi, Vadeli-Peşin Alış begin-->
+        <div class="row">
+            <div class="col-md-12 col-lg-12 order-2 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0 me-2">Alış Tutarı Tedarikçi Sayısı Grafiği</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-S05-E6-05-002-20"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-6 order-2 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0 me-2">En Çok Alış Yapılan Tedarikçi</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-S05-E6-06-002-24"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6 order-2 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0 me-2">Vadeli-Peşin Alış</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-S05-E6-06-002-28"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/Alış Tutarı Tedarikçi Sayısı Grafiği, En Çok Alış Yapılan Tedarikçi, Vadeli-Peşin Alış end -->
+        <!-- Satış Alış Karşılaştırma Grafiği, Satış -Alış Vergi Karşılaştırma Grafiği chart -->
+        <div class="row mb-4">
+            <div class="col-md-6 col-lg-6 order-2 mb-6">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0 me-2">Satış Alış Karşılaştırma Grafiği</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-S05-E6-05-003-01" class="px-2"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6 order-2 mb-6">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0 me-2">Satış -Alış Vergi Karşılaştırma Grafiği</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-S05-E6-06-003-02" class="px-2"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--/Satış Alış Karşılaştırma Grafiği, Satış -Alış Vergi Karşılaştırma Grafiği chart -->
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            //Net Kar chart begin
+            var options0100105 = {
+                chart: {
+                    type: 'radialBar',
+                    height: 150,
+                },
+                series: [@Html.Raw(JsonSerializer.Serialize(Model.TotalSalesPercentage))],
+                plotOptions: {
+                    radialBar: {
+                        hollow: {
+                            size: '55%'
+                        },
+                        dataLabels: {
+                            name: {
+                                show: false
+                            },
+                            value: {
+                                show: true,
+                                fontSize: '13px',
+                                offsetY: 6,
+                                formatter: function (val) {
+                                    return val + "%";
+                                }
+                            }
+                        }
+                    }
+                },
+                colors: ['#1E88E5'],
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shade: 'dark',
+                        type: 'horizontal',
+                        shadeIntensity: 0.5,
+                        gradientToColors: ['#1E88E5'],
+                        inverseColors: false,
+                        opacityFrom: 1,
+                        opacityTo: 1,
+                        stops: [0, 100]
+                    }
+                },
+                labels: ['Growth'],
+                legend: {
+                    show: false
+                },
+                tooltip: {
+                    enabled: false
+                }
+            };
+
+            var chart0100105 = new ApexCharts(document.querySelector("#chart-S05-E6-01-001-05"), options0100105);
+            chart0100105.render();
+
+            //Net Kar chart End
+            // Satış Vergi Tutarı  begin
+            var options0100110 = {
+                chart: {
+                    type: 'radialBar',
+                    height: 180,
+                },
+                series: [@Html.Raw(JsonSerializer.Serialize(Model.SalesTaxPercentage))],
+                plotOptions: {
+                    radialBar: {
+                        hollow: {
+                            size: '55%'
+                        },
+                        dataLabels: {
+                            name: {
+                                show: false
+                            },
+                            value: {
+                                show: true,
+                                fontSize: '13px',
+                                offsetY: 6,
+                                formatter: function (val) {
+                                    return val + "%";
+                                }
+                            }
+                        }
+                    }
+                },
+                colors: ['#1E88E5'],
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shade: 'dark',
+                        type: 'horizontal',
+                        shadeIntensity: 0.5,
+                        gradientToColors: ['#1E88E5'],
+                        inverseColors: false,
+                        opacityFrom: 1,
+                        opacityTo: 1,
+                        stops: [0, 100]
+                    }
+                },
+                labels: ['Growth'],
+                legend: {
+                    show: false
+                },
+                tooltip: {
+                    enabled: false
+                }
+            };
+
+            var chart0100110 = new ApexCharts(document.querySelector("#chart-S05-E6-01-001-10"), options0100110);
+            chart0100110.render();
+            // Satış Vergi Tutarı  end
+
+            //Müşteri Sayısı begin
+            var options0200115 = {
+                chart: {
+                    type: 'radialBar',
+                    height: 180,
+                },
+                series: [@Html.Raw(JsonSerializer.Serialize(Model.CustomerCountPercentage))],
+                plotOptions: {
+                    radialBar: {
+                        hollow: {
+                            size: '55%'
+                        },
+                        dataLabels: {
+                            name: {
+                                show: false
+                            },
+                            value: {
+                                show: true,
+                                fontSize: '13px',
+                                offsetY: 6,
+                                formatter: function (val) {
+                                    return val + "%";
+                                }
+                            }
+                        }
+                    }
+                },
+                colors: ['#1E88E5'],
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shade: 'dark',
+                        type: 'horizontal',
+                        shadeIntensity: 0.5,
+                        gradientToColors: ['#1E88E5'],
+                        inverseColors: false,
+                        opacityFrom: 1,
+                        opacityTo: 1,
+                        stops: [0, 100]
+                    }
+                },
+                labels: ['Growth'],
+                legend: {
+                    show: false
+                },
+                tooltip: {
+                    enabled: false
+                }
+            };
+
+            var chart0200115 = new ApexCharts(document.querySelector("#chart-S05-E6-02-001-15"), options0200115);
+            chart0200115.render();
+            //Müşteri Sayısı  end
+
+            // Satış Tutar Müşteri Sayısı Grafiği  begin
+            var options0100120 = {
+                chart: {
+                    type: 'line',
+                    height: 350
+                },
+                series: @Html.Raw(JsonSerializer.Serialize(Model.SatisTutariTedarikciChartData)) ?? [],
+                xaxis: {
+                    categories: ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Agu', 'Eyl', 'Eki', 'Kas', 'Ara']
+                },
+                stroke: {
+                    curve: 'smooth' // Çizgilerin yumuşatılması
+                },
+                markers: {
+                    size: 5 // Her veri noktası için işaretçi boyutu
+                },
+                colors: ['#1E88E5', '#E53935', '#43A047'],
+                tooltip: {
+                    shared: true,
+                    intersect: false,
+                    y: {
+                        formatter: function (val) {
+                            return val.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')  // Tooltip etiketlerini formatlar
+                        }
+                    }
+                },
+                yaxis: {
+                    labels: {
+                        formatter: function (value) {
+                            return value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'); // Tooltip etiketlerini formatlar
+                        }
+                    },
+                },
+            };
+
+            var chart0100120 = new ApexCharts(document.querySelector("#chart-S05-E6-01-001-20"), options0100120);
+            chart0100120.render();
+
+            // Satış Tutar Müşteri Sayısı Grafiği end
+
+            //En Çok Satış Yapılan Müşteriler begin
+            var option0200124 = {
+                chart: {
+                    type: 'pie',
+                    height: 300
+                },
+                yaxis: {
+                    labels: {
+                        formatter: function (value) {
+                            return value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' ₺'; // Tooltip etiketlerini formatlar
+                        }
+                    },
+                },
+                series: @Html.Raw(JsonSerializer.Serialize(Model.MostCustomerSalesChartData.Data)),
+                labels: @Html.Raw(JsonSerializer.Serialize(Model.MostCustomerSalesChartData.Name)),
+                legend: {
+                    show: false // Legend'ı (Team A, Team B vb.) gizler
+                },
+                colors: ['#1E88E5', '#43A047', '#FB8C00', '#E53935', '#8E24AA', '#00ACC1']
+            };
+
+            var chart0200124 = new ApexCharts(document.querySelector("#chart-S05-E6-02-001-24"), option0200124);
+            chart0200124.render();
+            //En Çok Satış Yapılan Müşteriler end
+
+            //Vadeli - Peşin Satış begin
+
+
+            var originalData = @Html.Raw(JsonSerializer.Serialize(Model.VadeliPesinSatisChartData?.Data)); // Orijinal veriler
+            var minVal0200128 = Math.min(...originalData);
+            var maxVal0200128 = Math.max(...originalData);
+            var minBarValue = maxVal0200128 / 70; // Küçük değerler için minimum görünürlük sınırı
+
+            // Minimum bar uzunluğu eklemek için küçük değerleri kontrol ederiz
+            var modifiedData = originalData.map(val => val < minBarValue ? minBarValue : val);
+
+            var option0200128 = {
+                chart: {
+                    type: 'bar',
+                    height: 150,
+                    toolbar: {
+                        show: false
+                    },
+                    sparkline: {
+                        enabled: false
+                    }
+                },
+                series: [{
+                    name: '',
+                    data: modifiedData ?? [], // Değerler, küçük olanları minimum bar uzunluğu ile değiştirilmiş
+                }],
+                plotOptions: {
+                    bar: {
+                        horizontal: true, // Yatay barlı grafik
+                        distributed: true, // Her barın farklı renkte olması için
+                        borderRadius: 6,
+                        barHeight: '33%', // Bar kalınlığını inceltmek için %33 ayarlandı
+                        dataLabels: {
+                            enabled: false // Barların üzerinde rakam gösterilmez
+                        }
+                    }
+                },
+                colors: ['#1E88E5', '#E53935', '#43A047'], // Hizmet: Mavi, Stok Satış: Kırmızı, T-Satış: Yeşil
+                xaxis: {
+                    max: Math.max(...modifiedData), // Maksimum değer, modifiye edilmiş veri kullanılır
+                    categories: @Html.Raw(JsonSerializer.Serialize(Model.VadeliPesinSatisChartData?.Name)) ?? [], // Kategoriler
+                    forceNiceScale: true, // Küçük değerler için uygun ölçeklendirme
+                    labels: {
+                        show: false // X ekseni etiketlerini gizler
+                    },
+                },
+                yaxis: {
+                    show: false // Y eksenini ve değerlerini gizler
+                },
+                grid: {
+                    show: false // Arka plan ızgarası görünmesin
+                },
+                tooltip: {
+                    enabled: true,
+                    y: {
+                        formatter: function (val, opts) {
+                            const category = opts.w.globals.labels[opts.dataPointIndex]; // Tooltip'te başlık ve değer gösterimi
+                            // Eğer veri küçükse, gerçek değeri tooltip'te göstermek için orijinal veriyi kullanıyoruz
+                            var realValue = originalData[opts.dataPointIndex];
+                            return category + ": " + realValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + " ₺"; // Başlık ve fiyat gösterir
+                        }
+                    }
+                },
+                dataLabels: {
+                    enabled: false // Barlar üzerinde veri gösterilmeyecek
+                },
+                fill: {
+                    type: 'solid',
+                    colors: ['#1E88E5', '#E53935', '#43A047'],
+                    opacity: 1
+                }
+            };
+
+            var chart0200128 = new ApexCharts(document.querySelector("#chart-S05-E6-02-001-28"), option0200128);
+            chart0200128.render();
+
+            //Vadeli - Peşin Satış end
+
+
+            /// ################### alış tutarı grubu ###################
+            //Toplam Alışlar chart begin
+            var options0300205 = {
+                chart: {
+                    type: 'radialBar',
+                    height: 150,
+                },
+                series: [@Html.Raw(JsonSerializer.Serialize(Model.TotalBuyPercentage))],
+                plotOptions: {
+                    radialBar: {
+                        hollow: {
+                            size: '55%'
+                        },
+                        dataLabels: {
+                            name: {
+                                show: false
+                            },
+                            value: {
+                                show: true,
+                                fontSize: '13px',
+                                offsetY: 6,
+                                formatter: function (val) {
+                                    return val + "%";
+                                }
+                            }
+                        }
+                    }
+                },
+                colors: ['#1E88E5'],
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shade: 'dark',
+                        type: 'horizontal',
+                        shadeIntensity: 0.5,
+                        gradientToColors: ['#1E88E5'],
+                        inverseColors: false,
+                        opacityFrom: 1,
+                        opacityTo: 1,
+                        stops: [0, 100]
+                    }
+                },
+                labels: ['Growth'],
+                legend: {
+                    show: false
+                },
+                tooltip: {
+                    enabled: false
+                }
+            };
+
+            var chart0300205 = new ApexCharts(document.querySelector("#chart-S05-E6-03-002-05"), options0300205);
+            chart0300205.render();
+
+            //Toplam alışlar  chart End
+            // Alış Vergi Tutarı  begin
+            var options0300210 = {
+                chart: {
+                    type: 'radialBar',
+                    height: 180,
+                },
+                series: [@Html.Raw(JsonSerializer.Serialize(Model.BuyTaxPercentage))],
+                plotOptions: {
+                    radialBar: {
+                        hollow: {
+                            size: '55%'
+                        },
+                        dataLabels: {
+                            name: {
+                                show: false
+                            },
+                            value: {
+                                show: true,
+                                fontSize: '13px',
+                                offsetY: 6,
+                                formatter: function (val) {
+                                    return val + "%";
+                                }
+                            }
+                        }
+                    }
+                },
+                colors: ['#1E88E5'],
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shade: 'dark',
+                        type: 'horizontal',
+                        shadeIntensity: 0.5,
+                        gradientToColors: ['#1E88E5'],
+                        inverseColors: false,
+                        opacityFrom: 1,
+                        opacityTo: 1,
+                        stops: [0, 100]
+                    }
+                },
+                labels: ['Growth'],
+                legend: {
+                    show: false
+                },
+                tooltip: {
+                    enabled: false
+                }
+            };
+
+            var chart0300210 = new ApexCharts(document.querySelector("#chart-S05-E6-03-002-10"), options0300210);
+            chart0300210.render();
+            // Alış Vergi Tutarı  end
+
+            //Tedarikçi Sayısı begin
+            var options0400215 = {
+                chart: {
+                    type: 'radialBar',
+                    height: 180,
+                },
+                series: [@Html.Raw(JsonSerializer.Serialize(Model.SuppliersCountPercentage))],
+                plotOptions: {
+                    radialBar: {
+                        hollow: {
+                            size: '55%'
+                        },
+                        dataLabels: {
+                            name: {
+                                show: false
+                            },
+                            value: {
+                                show: true,
+                                fontSize: '13px',
+                                offsetY: 6,
+                                formatter: function (val) {
+                                    return val + "%";
+                                }
+                            }
+                        }
+                    }
+                },
+                colors: ['#1E88E5'],
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shade: 'dark',
+                        type: 'horizontal',
+                        shadeIntensity: 0.5,
+                        gradientToColors: ['#1E88E5'],
+                        inverseColors: false,
+                        opacityFrom: 1,
+                        opacityTo: 1,
+                        stops: [0, 100]
+                    }
+                },
+                labels: ['Growth'],
+                legend: {
+                    show: false
+                },
+                tooltip: {
+                    enabled: false
+                }
+            };
+
+            var chart0400215 = new ApexCharts(document.querySelector("#chart-S05-E6-04-002-15"), options0400215);
+            chart0400215.render();
+            //Tedarikçi Sayısı end
+
+            /// group End
+
+            // Alış Tutarı Tedarikçi Sayısı Grafiği begin
+            var options0500220 = {
+                chart: {
+                    type: 'line',
+                    height: 350
+                },
+                series: @Html.Raw(JsonSerializer.Serialize(Model.AlisTutariTedarikciChartData)) ?? [],
+                xaxis: {
+                    categories: ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Agu', 'Eyl', 'Eki', 'Kas', 'Ara']
+                },
+                stroke: {
+                    curve: 'smooth' // Çizgilerin yumuşatılması
+                },
+                markers: {
+                    size: 5 // Her veri noktası için işaretçi boyutu
+                },
+                colors: ['#1E88E5', '#E53935', '#43A047'],
+                tooltip: {
+                    shared: true,
+                    intersect: false,
+                    y: {
+                        formatter: function (val) {
+                            return val.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')  // Tooltip etiketlerini formatlar
+                        }
+                    }
+                },
+                yaxis: {
+                    labels: {
+                        formatter: function (value) {
+                            return value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'); // Tooltip etiketlerini formatlar
+                        }
+                    },
+                },
+            };
+
+            var chart0500220 = new ApexCharts(document.querySelector("#chart-S05-E6-05-002-20"), options0500220);
+            chart0500220.render();
+
+            //Alış Tutarı Tedarikçi Sayısı Grafiği end
+
+            ///###################
+            //En Çok Alış Yapılan Tedarikçi begin
+            var option0600224 = {
+                chart: {
+                    type: 'pie',
+                    height: 300
+                },
+                yaxis: {
+                    labels: {
+                        formatter: function (value) {
+                            return value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' ₺'; // Tooltip etiketlerini formatlar
+                        }
+                    },
+                },
+                series: @Html.Raw(JsonSerializer.Serialize(Model.MostSupplierSalesChartData.Data)),
+                labels: @Html.Raw(JsonSerializer.Serialize(Model.MostSupplierSalesChartData.Name)),
+                legend: {
+                    show: false // Legend'ı (Team A, Team B vb.) gizler
+                },
+                colors: ['#1E88E5', '#43A047', '#FB8C00', '#E53935', '#8E24AA', '#00ACC1']
+            };
+
+            var chart0600224 = new ApexCharts(document.querySelector("#chart-S05-E6-06-002-24"), option0600224);
+            chart0600224.render();
+            //En Çok Alış Yapılan Tedarikçi end
+
+            //Vadeli-Peşin Alış begin
+
+
+            var originalData0600228 = @Html.Raw(JsonSerializer.Serialize(Model.VadeliPesinAlisChartData?.Data))  ?? []; // Orijinal veriler
+            var minVal0600228 = Math.min(...originalData0600228);
+            var maxVal0600228 = Math.max(...originalData0600228);
+            var minBarValue = maxVal0600228 / 70; // Küçük değerler için minimum görünürlük sınırı
+
+            // Minimum bar uzunluğu eklemek için küçük değerleri kontrol ederiz
+            var modifiedData = originalData0600228.map(val => val < minBarValue ? minBarValue : val);
+
+            var option0600228 = {
+                chart: {
+                    type: 'bar',
+                    height: 150,
+                    toolbar: {
+                        show: false
+                    },
+                    sparkline: {
+                        enabled: false
+                    }
+                },
+                series: [{
+                    name: '',
+                    data: modifiedData ?? [], // Değerler, küçük olanları minimum bar uzunluğu ile değiştirilmiş
+                }],
+                plotOptions: {
+                    bar: {
+                        horizontal: true, // Yatay barlı grafik
+                        distributed: true, // Her barın farklı renkte olması için
+                        borderRadius: 6,
+                        barHeight: '33%', // Bar kalınlığını inceltmek için %33 ayarlandı
+                        dataLabels: {
+                            enabled: false // Barların üzerinde rakam gösterilmez
+                        }
+                    }
+                },
+                colors: ['#1E88E5', '#E53935', '#43A047'], // Hizmet: Mavi, Stok Satış: Kırmızı, T-Satış: Yeşil
+                xaxis: {
+                    max: Math.max(...modifiedData), // Maksimum değer, modifiye edilmiş veri kullanılır
+                    categories: @Html.Raw(JsonSerializer.Serialize(Model.VadeliPesinAlisChartData?.Name)) ?? [], // Kategoriler
+                    forceNiceScale: true, // Küçük değerler için uygun ölçeklendirme
+                    labels: {
+                        show: false // X ekseni etiketlerini gizler
+                    },
+                },
+                yaxis: {
+                    show: false // Y eksenini ve değerlerini gizler
+                },
+                grid: {
+                    show: false // Arka plan ızgarası görünmesin
+                },
+                tooltip: {
+                    enabled: true,
+                    y: {
+                        formatter: function (val, opts) {
+                            const category = opts.w.globals.labels[opts.dataPointIndex]; // Tooltip'te başlık ve değer gösterimi
+                            // Eğer veri küçükse, gerçek değeri tooltip'te göstermek için orijinal veriyi kullanıyoruz
+                            var realValue = originalData0600228[opts.dataPointIndex];
+                            return category + ": " + realValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + " ₺"; // Başlık ve fiyat gösterir
+                        }
+                    }
+                },
+                dataLabels: {
+                    enabled: false // Barlar üzerinde veri gösterilmeyecek
+                },
+                fill: {
+                    type: 'solid',
+                    colors: ['#1E88E5', '#E53935', '#43A047'],
+                    opacity: 1
+                }
+            };
+
+            var chart0600228 = new ApexCharts(document.querySelector("#chart-S05-E6-06-002-28"), option0600228);
+            chart0600228.render();
+
+            //Vadeli-Peşin Alış end
+
+            //Satış -Alış Vergi Karşılaştırma Grafiği begin 
+            var options0600302 = {
+                chart: {
+                    type: 'bar',
+                    height: 350
+                },
+                series: @Html.Raw(JsonSerializer.Serialize(Model.SellBuyTaxCompare)),
+                plotOptions: {
+                    bar: {
+                        horizontal: false, // Dikey barlar
+                        borderRadius: 5, // Bar kenarları yuvarlak olsun
+                        columnWidth: '50%' // Bar genişliği ayarı
+                    }
+                },
+                dataLabels: {
+                    enabled: false // Barların üzerinde veri göstermemek için
+                },
+                xaxis: {
+                    categories: ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Agu', 'Eyl', 'Eki', 'Kas', 'Ara'], // Aylar
+                },
+                yaxis: {
+                    labels: {
+                        formatter: function (value) {
+                            return value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' ₺'; // Tooltip etiketlerini formatlar
+                        }
+                    },
+                },
+                legend: {
+                    position: 'top', // Legend (açıklama) konumu
+                    horizontalAlign: 'center'
+                },
+                colors: ['#1E88E5', '#E53935'], // Alışlar için mavi, satışlar için kırmızı renk
+                tooltip: {
+                    y: {
+                        formatter: function (value) {
+                            return value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' ₺'; // Tooltip etiketlerini formatlar
+                        }
+                    }
+                }
+            };
+
+            var chart0600302 = new ApexCharts(document.querySelector("#chart-S05-E6-06-003-02"), options0600302);
+            chart0600302.render();
+
+            //Satış -Alış Vergi Karşılaştırma Grafiği end
+
+            //Satış Alış Karşılaştırma Grafiği begin 
+            var options0500301 = {
+                chart: {
+                    type: 'bar',
+                    height: 350
+                },
+                series: @Html.Raw(JsonSerializer.Serialize(Model.SellBuyCompare)),
+                plotOptions: {
+                    bar: {
+                        horizontal: false, // Dikey barlar
+                        borderRadius: 5, // Bar kenarları yuvarlak olsun
+                        columnWidth: '50%' // Bar genişliği ayarı
+                    }
+                },
+                dataLabels: {
+                    enabled: false // Barların üzerinde veri göstermemek için
+                },
+                xaxis: {
+                    categories: ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Agu', 'Eyl', 'Eki', 'Kas', 'Ara'], // Aylar
+                },
+                yaxis: {
+                    labels: {
+                        formatter: function (value) {
+                            return value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' ₺'; // Tooltip etiketlerini formatlar
+                        }
+                    },
+                },
+                legend: {
+                    position: 'top', // Legend (açıklama) konumu
+                    horizontalAlign: 'center'
+                },
+                colors: ['#1E88E5', '#E53935'], // Alışlar için mavi, satışlar için kırmızı renk
+                tooltip: {
+                    y: {
+                        formatter: function (value) {
+                            return value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' ₺'; // Tooltip etiketlerini formatlar
+                        }
+                    }
+                }
+            };
+
+            var chart0500301 = new ApexCharts(document.querySelector("#chart-S05-E6-05-003-01"), options0500301);
+            chart0500301.render();
+
+            //Satış Alış Karşılaştırma Grafiği end
+
+        });
+
+    </script>
+
+}

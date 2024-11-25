@@ -1,0 +1,157 @@
+@using System.Text.Json
+@model FinancialStatementsModel
+
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Firma Genel Durum /</span> Özet Mali Tablolar</h4>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <h5 class="card-header">Özet Mali Tablolar</h5>
+
+            <hr class="my-0" />
+            <div class="card-body">
+                <div class="row">
+                    @using (Html.BeginForm("FinancialStatements", "GeneralSummary", FormMethod.Post))
+                    {
+                        <div class="row mb-4">
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="ReportTypeId">Rapor Tipi</label>
+                                    <select id="ReportTypeId" class="form-control select2" asp-for="ReportTypeId"
+                                        aria-label="ReportTypeId">
+                                        <option value="1">Yıllık</option>
+                                        <option value="2">Aylık</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label for="CariDonemDate" class="form-label">Cari Dönem</label>
+                                    <input class="form-control onlyMontPicker" type="text" name="CariDonemDate"
+                                        id="CariDonemDate" value="@Model.CariDonemDate" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="OncekiDonemDate" class="form-label">Önceki Dönem</label>
+                                    <input class="form-control onlyMontPicker" type="text" id="OncekiDonemDate"
+                                        name="OncekiDonemDate" value="@Model.OncekiDonemDate" />
+
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <button type="submit" class="btn btn-primary me-2">Sorgula</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+
+
+            <div class="col-md-6 col-lg-6 order-2 mb-6">
+                <div class="card h-100">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Aktifler</th>
+                                <th>Önceki Dönem</th>
+                                <th>Cari Dönem</th>
+                                <th>Değ %</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                            @foreach (var b in Model.Aktifler)
+                            {
+                                <tr>
+                                    <td>@b.Title</td>
+                                    <td>@b.Data.OncekiDonem</td>
+                                    <td>@b.Data.CariDonem</td>
+                                    <td><span class="badge link-warning me-1">@b.Data.Degisim</span></td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-6 order-2 mb-6">
+                <div class="card h-100">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Aktifler</th>
+                                <th>Önceki Dönem</th>
+                                <th>Cari Dönem</th>
+                                <th>Değ %</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                            @foreach (var b in Model.Pasifler)
+                            {
+                                <tr>
+                                    <td>@b.Title</td>
+                                    <td>@b.Data.OncekiDonem</td>
+                                    <td>@b.Data.CariDonem</td>
+                                    <td><span class="badge link-warning me-1">@b.Data.Degisim</span></td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-12 col-lg-12 order-2 mb-6">
+                <div class="card h-100">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Özet Gelir Tablosu</th>
+                                <th>Önceki Dönem</th>
+                                <th>NS %</th>
+                                <th>Cari Dönem</th>
+                                <th>NS %</th>
+                                <th>Büyüme %%</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                            @foreach (var b in Model.Ozetler)
+                            {
+                                <tr>
+                                    <td>@b.Title</td>
+                                    <td>@b.Data.OncekiDonem</td>
+                                    <td><span class="badge link-warning me-1">@b.Data.OncekiDonemNS</span></td>
+                                    <td>@b.Data.CariDonem</td>
+                                    <td><span class="badge link-danger me-1">@b.Data.CariDonemNS</span></td>
+                                    <td><span class="badge link-success me-1">@b.Data.Degisim</span></td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            // Yalnızca sayı ve slash (/) karakterlerine izin verme
+            $('#cariDonemDate').on('keypress', function (e) {
+                var charCode = e.which;
+
+                // Yalnızca sayı (0-9) ve slash (/) karakterleri kabul edilecek
+                if (!(charCode >= 48 && charCode <= 57) && charCode !== 47) {
+                    e.preventDefault();
+                    alert("Lütfen sadece sayılar ve '/' karakterini kullanın.");
+                }
+            });
+        });
+
+    </script>
+
+
+}

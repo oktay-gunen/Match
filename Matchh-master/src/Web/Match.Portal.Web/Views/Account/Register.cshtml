@@ -1,0 +1,82 @@
+﻿@model RegisterViewModel
+
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Hesap Ayarları /</span>Yeni Kullanıcı Hesabı</h4>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card mb-4">
+      <h5 class="card-header">Yeni Kullanıcı Hesabı</h5>
+      <!-- Account -->
+      <hr class="my-0" />
+      <div class="card-body">
+        @if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count > 0)
+        {
+              <div class="alert alert-danger alert-dismissible">
+                   @Html.ValidationSummary()
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+        }
+        <form id="formNewAccountSettings" method="POST">
+          <div class="row">
+            <div class="mb-3 col-md-6">
+              <label asp-for="Name" class="form-label">Ad</label>
+              <input asp-for="Name" class="form-control" type="text" autofocus />
+              <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="mb-3 col-md-6">
+              <label asp-for="Surname" class="form-label">Soyad</label>
+              <input asp-for="Surname" class="form-control" type="text" />
+              <span asp-validation-for="Surname" class="text-danger"></span>
+            </div>
+            <div class="mb-3 col-md-6">
+              <label asp-for="Email" class="form-label">E-mail</label>
+              <input asp-for="Email" class="form-control" type="text" placeholder="mail@example.com" />
+              <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3 col-md-6">
+              <label class="form-label" asp-for="Phone">Cep Telefonu</label>
+              <div class="input-group input-group-merge">
+                <span class="input-group-text"></span>
+                <input asp-for="Phone" type="text" class="form-control" placeholder="555 555 0111" />
+              </div>
+              <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="mb-3 col-md-6 form-password-toggle">
+              <label asp-for="Password" class="form-label">Şifre</label>
+              <div class="input-group input-group-merge">
+                <input type="password" class="form-control" asp-for="Password" placeholder="············"
+                  aria-describedby="password">
+                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+              </div>
+              <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="mb-3 col-md-6 form-password-toggle">
+              <label asp-for="ConfirmPassword" class="form-label">Şifre Tekrar</label>
+              <div class="input-group input-group-merge">
+                <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="············"
+                  aria-describedby="confirm-password">
+                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+              </div>
+              <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+           <div class="mb-3 col-md-6">
+              <label asp-for="OperationClaimId" class="form-label">Yetki</label>
+               <select class="form-select" asp-for="OperationClaimId" aria-label="OperationClaimId">
+                @foreach (var role in Model.Roles)
+                 {
+                 <option selected value="@role.Id">@role.Name</option>
+                }
+               </select>
+            </div>
+          </div>
+          <div class="mt-2">
+            <button type="submit" class="btn btn-primary me-2">Kaydet</button>
+            <a type="submit" asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">İptal</a>
+          </div>
+        </form>
+      </div>
+      <!-- /Account -->
+    </div>
+  </div>
+</div>

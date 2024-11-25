@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="tr-tr" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default"
+  data-assets-path="~/worklib/" data-template="vertical-menu-template-free">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+  <title>Match</title>
+
+  <meta name="description" content="" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="~/worklib/img/favicon/favicon.ico" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet" />
+
+  <!-- Icons. Uncomment required icon fonts -->
+  <link rel="stylesheet" href="~/worklib/vendor/fonts/boxicons.css" />
+
+  <!-- Core CSS -->
+  <link rel="stylesheet" href="~/worklib/vendor/css/core.css" class="template-customizer-core-css" />
+  <link rel="stylesheet" href="~/worklib/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+  <link rel="stylesheet" href="~/worklib/css/demo.css" />
+
+  <!-- Vendors CSS -->
+  <link rel="stylesheet" href="~/worklib/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+
+  <!-- Page CSS -->
+
+  <!-- Helpers -->
+  <script src="~/worklib/vendor/js/helpers.js"></script>
+
+  <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+  <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+  <script src="~/worklib/js/config.js"></script>
+</head>
+
+<body>
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <!-- Menu -->
+      @await Html.PartialAsync("_NavbarPartial")
+      <!-- / Menu -->
+
+      <!-- Layout container -->
+      <div class="layout-page">
+        <!-- Navbar -->
+
+        <nav
+          class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+          id="layout-navbar">
+          <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+              <i class="bx bx-menu bx-sm"></i>
+            </a>
+          </div>
+
+          <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+
+
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+
+
+              <!-- User -->
+              <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                  <div class="avatar" style="margin-bottom: 10px">
+                    <div class="profile-image">@User.FindFirst(ClaimTypes.GivenName)?.Value</div>
+                  </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      <div class="d-flex">
+                        <div class="flex-grow-1">
+                          <span class="fw-semibold d-block">@User.Identity?.Name</span>
+                          <small class="text-muted">@User.FindFirst(ClaimTypes.Role)?.Value</small>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="/account/accountdetail">
+                      <i class="bx bx-user me-2"></i>
+                      <span class="align-middle">Profilim</span>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="/logout">
+                      <i class="bx bx-power-off me-2"></i>
+                      <span class="align-middle">Çıkış</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--/ User -->
+            </ul>
+          </div>
+        </nav>
+
+        <!-- / Navbar -->
+
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+          <!-- Toast with Placements -->
+          <div class="bs-toast toast toast-placement-ex m-2 fade bg-info bottom-0 end-0 hide" role="alert"
+            id="popup-info" aria-live="assertive" aria-atomic="true" data-delay="2000">
+            <div class="toast-header">
+              <i class="bx bx-bell me-2"></i>
+              <div class="me-auto fw-semibold">Bilgi</div>
+              <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">@ViewData["InfoMessage"]</div>
+          </div>
+          <!-- Toast with Placements -->
+          <div class="container-xxl flex-grow-1 container-p-y">
+            @RenderBody()
+          </div>
+        </div>
+        <!-- / Content -->
+
+        <!-- Footer -->
+        <footer class="content-footer footer bg-footer-theme">
+
+        </footer>
+        <!-- / Footer -->
+
+        <div class="content-backdrop fade"></div>
+      </div>
+      <!-- Content wrapper -->
+    </div>
+    <!-- / Layout page -->
+  </div>
+
+  <!-- Overlay -->
+  <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <!-- / Layout wrapper -->
+
+  <!-- Core JS -->
+  <!-- build:js assets/vendor/js/core.js -->
+  <script src="~/worklib/vendor/libs/jquery/jquery.js"></script>
+  <script src="~/worklib/vendor/libs/popper/popper.js"></script>
+  <script src="~/worklib/vendor/js/bootstrap.js"></script>
+  <script src="~/worklib/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+  <script src="~/worklib/vendor/js/menu.js"></script>
+  <!-- endbuild -->
+
+  <!-- chart JS -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  @* <script src="~/worklib/vendor/libs/apex-charts/apexcharts.js"></script> *@
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.tr.min.js"></script>
+
+
+  <!-- Main JS -->
+  <script src="~/worklib/js/main.js"></script>
+
+  <!-- Page JS -->
+  <script src="~/worklib/js/pages-account-settings-account.js"></script>
+
+  <!-- Place this tag in your head or just before your close body tag. -->
+  <script async defer src="~/worklib/vendor/js/buttons.js"></script>
+  <script async defer src="~/worklib/js/ui-toasts.js"></script>
+  @await RenderSectionAsync("Scripts", required: false)
+  @if (ViewData["InfoMessage"] != null)
+  {
+    <script type="text/javascript">
+      window.onload = function () {
+        showToastInfoBox()
+      };
+    </script>
+  }
+  }
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $('.onlyMontPicker').datepicker({
+        format: "mm/yyyy",
+        startView: "years",
+        minViewMode: "months",
+        autoclose: true,
+        language: "tr" // Türkçe dil ayarı
+      });
+
+
+    });
+    @* menu auto selected *@
+      document.addEventListener('DOMContentLoaded', function () {
+        // Geçerli URL'yi alın
+        var currentUrl = window.location.pathname;
+
+        // Tüm alt menü öğelerini alın
+        var submenuLinks = document.querySelectorAll('#menu .menu-sub .menu-link');
+
+        // Alt menüleri kontrol et
+        submenuLinks.forEach(function (link) {
+          if (link.getAttribute('href') === currentUrl) {
+            link.classList.add('active'); // Alt menüye active class'ı ekle
+            var parentMenuItem = link.closest('.menu-item').closest('.menu-item');
+            if (parentMenuItem) {
+              parentMenuItem.classList.add('active'); // Üst menüye open class'ı ekle
+              var parentMenuLink = parentMenuItem.closest('.menu-item').closest('.menu-sub').closest('.menu-item');
+
+              if (parentMenuLink) {
+                parentMenuLink.classList.add('active') // Üst menüye active class'ı ekle
+                parentMenuLink.classList.add('open');
+              }
+            }
+          }
+        });
+
+      });
+
+  </script>
+
+</body>
+
+</html>

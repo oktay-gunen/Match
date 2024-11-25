@@ -1,0 +1,758 @@
+@using System.Text.Json
+@model FinancialSummaryModel
+
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Firma Genel Durum /</span> Özet Finansallar</h4>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <h5 class="card-header">Özet Finansallar</h5>
+
+            <hr class="my-0" />
+            <div class="card-body">
+                <div class="row">
+                    @using (Html.BeginForm("FinancialSummary", "GeneralSummary", FormMethod.Post))
+                    {
+                        <div class="row mb-4">
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="ReportTypeId">Rapor Tipi</label>
+                                    <select id="ReportTypeId" class="form-control select2" asp-for="ReportTypeId"
+                                        aria-label="ReportTypeId">
+                                        <option value="1">Yıllık</option>
+                                        <option value="2">Aylık</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="CariDonemDate" class="form-label">Dönem</label>
+                                    <input class="form-control onlyMontPicker" type="text" id="CariDonemDate"
+                                        name="CariDonemDate" value="@Model.CariDonemDate" />
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <button type="submit" class="btn btn-primary me-2">Sorgula</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <!-- ÖZET VARLIK DURUMU begin-->
+        <div class="row">
+            <div class="col-md-7 col-lg-7 order-2 mb-4">
+                <div class="card h-100">
+                    <h5 class="card-header">Özet Varlık Durumu</h5>
+                    <div class="table-responsive text-nowrap">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nakit ve Benzeri</th>
+                                    <th>Bakiye ₺</th>
+                                    <th>Bakiye $</th>
+                                    <th>Bakiye €</th>
+                                    <th>#Döviz</th>
+                                    <th>Toplam</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+                                @foreach (var b in Model.SummaryAssetData)
+                                {
+                                    <tr>
+                                        <td>
+                                            @b.Title
+                                        </td>
+                                        <td>
+                                            @b.Data.BalanceTL
+                                        </td>
+                                        <td>
+                                            @b.Data.BalanceUSD
+                                        </td>
+                                        <td>
+                                            @b.Data.BalanceEUR
+                                        </td>
+                                        <td>
+                                            @b.Data.BalanceDoviz
+                                        </td>
+                                        <td>
+                                            @b.Data.Toplam
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5 col-lg-5 order-2 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0 me-2">Varlıklar</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-S03-E6-02-002"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ ÖZET VARLIK DURUMU end -->
+        <!-- Alacaklar Borçlar begin-->
+        <div class="row">
+            <div class="col-md-7 col-lg-7 order-2 mb-4">
+                <div class="card h-100">
+                    <h5 class="card-header">Alacaklar Borçlar</h5>
+                    <div class="table-responsive text-nowrap">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Alacaklar</th>
+                                    <th>Bakiye ₺</th>
+                                    <th>Bakiye $</th>
+                                    <th>Bakiye €</th>
+                                    <th>#Döviz</th>
+                                    <th>Toplam</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+                                @foreach (var b in Model.ReceivablesDebitsData)
+                                {
+                                    <tr>
+                                        <td>
+
+                                            @b.Title
+                                        </td>
+                                        <td>
+                                            @b.Data.BalanceTL
+                                        </td>
+                                        <td>
+                                            @b.Data.BalanceUSD
+                                        </td>
+                                        <td>
+                                            @b.Data.BalanceEUR
+                                        </td>
+                                        <td>
+                                            @b.Data.BalanceDoviz
+                                        </td>
+                                        <td>
+                                            @b.Data.Toplam
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5 col-lg-5 order-2 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 style="font-size: 16px;" class="card-title m-0 me-2">Vadesi Gelmeyen, Vadesi Geçen
+                            Alacakların Toplam Alacaklara %</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-S03-E6-02-003-16"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ Alacaklar Borçlar end -->
+        <!-- VADESİ GEÇEN ALACAK YAŞLANDIRMA begin-->
+        <div class="row">
+            <div class="col-md-7 col-lg-7 order-2 mb-4">
+                <div class="card h-100">
+                    <h5 class="card-header">VADESİ GEÇEN ALACAK YAŞLANDIRMA</h5>
+                    <div class="table-responsive text-nowrap">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Alacak Yaşlandırma</th>
+                                    <th>Bakiye ₺</th>
+                                    <th>Bakiye $</th>
+                                    <th>Bakiye €</th>
+                                    <th>#Döviz</th>
+                                    <th>Toplam</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+                                @foreach (var b in Model.ReceivablesAgingData)
+                                {
+                                    <tr>
+                                        <td>
+
+                                            @b.Title
+                                        </td>
+                                        <td>
+                                            @b.Data.BalanceTL
+                                        </td>
+                                        <td>
+                                            @b.Data.BalanceUSD
+                                        </td>
+                                        <td>
+                                            @b.Data.BalanceEUR
+                                        </td>
+                                        <td>
+                                            @b.Data.BalanceDoviz
+                                        </td>
+                                        <td>
+                                            @b.Data.Toplam
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5 col-lg-5 order-2 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0 me-2">Vadesi Geçen Alacakların Toplam alacaklara %</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-S03-E6-04-003-42"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ VADESİ GEÇEN ALACAK YAŞLANDIRMA end -->
+        <!-- BORÇLAR begin-->
+        <div class="row">
+            <div class="col-md-7 col-lg-7 order-2 mb-4">
+                <div class="card h-100">
+                    <h5 class="card-header">Borçlar</h5>
+                    <div class="table-responsive text-nowrap">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Borçlar</th>
+                                    <th>Bakiye ₺</th>
+                                    <th>Bakiye $</th>
+                                    <th>Bakiye €</th>
+                                    <th>#Döviz</th>
+                                    <th>Toplam</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+                                @foreach (var b in Model.DebtsData)
+                                {
+                                    <tr>
+                                        <td>
+
+                                            @b.Title
+                                        </td>
+                                        <td>
+                                            @b.Data.BalanceTL
+                                        </td>
+                                        <td>
+                                            @b.Data.BalanceUSD
+                                        </td>
+                                        <td>
+                                            @b.Data.BalanceEUR
+                                        </td>
+                                        <td>
+                                            @b.Data.BalanceDoviz
+                                        </td>
+                                        <td>
+                                            @b.Data.Toplam
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5 col-lg-5 order-2 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0 me-2">Borçlar İlerlemesi</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-S03-E6-04-003-58"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ BORÇLAR end -->
+        <!-- BORÇLAR YAŞLANDIRMA begin-->
+        <div class="row">
+            <div class="col-md-7 col-lg-7 order-2 mb-4">
+                <div class="card h-100">
+                    <h5 class="card-header">Borç Yaşlandırma</h5>
+                    <div class="table-responsive text-nowrap">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Borç Yaşlandırma</th>
+                                    <th>Bakiye ₺</th>
+                                    <th>Bakiye $</th>
+                                    <th>Bakiye €</th>
+                                    <th>#Döviz</th>
+                                    <th>Toplam</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+                                @foreach (var b in Model.DebtsAgingData)
+                                {
+                                    <tr>
+                                        <td>
+
+                                            @b.Title
+                                        </td>
+                                        <td>
+                                            @b.Data.BalanceTL
+                                        </td>
+                                        <td>
+                                            @b.Data.BalanceUSD
+                                        </td>
+                                        <td>
+                                            @b.Data.BalanceEUR
+                                        </td>
+                                        <td>
+                                            @b.Data.BalanceDoviz
+                                        </td>
+                                        <td>
+                                            @b.Data.Toplam
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5 col-lg-5 order-2 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0 me-2">Borç Yaşlandırma İlerlemesi</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-S03-E6-06-003-84"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ BORÇLAR YAŞLANDIRMA end -->
+        <!-- VADESİ GELMEMİŞ BORÇ-VADESİ GELMEMİŞ ALACAKLAR - TAHSİLAT PERFORMANSI begin-->
+        <div class="row">
+            <div class="col-md-7 col-lg-7 order-2 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0 me-2">VADESİ GELMEMİŞ BORÇ-VADESİ GELMEMİŞ ALACAKLAR</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-S03-E6-05-004-01"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5 col-lg-5 order-2 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0 me-2">TAHSİLAT PERFORMANSI</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-S03-E6-06-006-01"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ VADESİ GELMEMİŞ BORÇ-VADESİ GELMEMİŞ ALACAKLAR - TAHSİLAT PERFORMANSI end -->
+
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            // Yalnızca sayı ve slash (/) karakterlerine izin verme
+            $('#cariDonemDate').on('keypress', function (e) {
+                var charCode = e.which;
+
+                // Yalnızca sayı (0-9) ve slash (/) karakterleri kabul edilecek
+                if (!(charCode >= 48 && charCode <= 57) && charCode !== 47) {
+                    e.preventDefault();
+                    alert("Lütfen sadece sayılar ve '/' karakterini kullanın.");
+                }
+            });
+
+
+
+            // Varlıklar begin
+
+            var optionsVarliklar = {
+                series: @Html.Raw(JsonSerializer.Serialize(Model.SummaryAssetChartData)),
+                chart: {
+                    type: 'bar',
+                    height: 350,
+                    stacked: true,
+                    toolbar: {
+                        show: true
+                    },
+                    zoom: {
+                        enabled: true
+                    }
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        legend: {
+                            position: 'bottom',
+                            offsetX: -10,
+                            offsetY: 0
+                        }
+                    }
+                }],
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        borderRadius: 0,
+                        dataLabels: {
+                            total: {
+                                enabled: false,
+                            }
+                        }
+                    },
+                },
+                xaxis: {
+                    categories: ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Agu', 'Eyl', 'Eki', 'Kas', 'Ara']
+
+                },
+                yaxis: {
+                    labels: {
+                        formatter: function (value) {
+                            return value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' ₺'; // Tooltip etiketlerini formatlar
+                        }
+                    },
+                },
+                legend: {
+                    position: 'right',
+                    offsetY: 40
+                },
+                fill: {
+                    opacity: 1
+                }, dataLabels: {
+                    enabled: false
+                },
+            };
+
+            var chartE602002 = new ApexCharts(document.querySelector("#chart-S03-E6-02-002"), optionsVarliklar);
+            chartE602002.render();
+
+            // Varlıklar end
+
+            //Alacaklar Borçlar begin
+
+            // Yüzde değeri (0-100 arasında)
+            var percentage = @Html.Raw(JsonSerializer.Serialize(Model.ReceivablesDebitsChartData)); // örn. %75 dolu bir bar
+
+            var options0200316 = {
+                chart: {
+                    height: 100, // Barın yüksekliği
+                    type: 'bar',
+                    toolbar: {
+                        show: false
+                    }
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: true, // Barın yatay olması
+                        barHeight: '100%', // Barın tam yüksekliği kaplaması
+                    }
+                },
+                dataLabels: {
+                    enabled: true, // Veri etiketlerini göster
+                    formatter: function (val) {
+                        return val + "%"; // Etiket metnini yüzde olarak göster
+                    },
+                    style: {
+                        colors: ['#fff'], // Etiketin rengi
+                        fontSize: '14px',
+                        fontWeight: 'bold',
+                    }
+                },
+                series: [{
+                    data: [percentage]
+                }],
+                xaxis: {
+                    max: 100, // X ekseni 100 olarak ayarlanır
+                    labels: {
+                        show: false
+                    }
+                },
+                yaxis: {
+                    labels: {
+                        show: false
+                    }
+                },
+                grid: {
+                    show: false
+                },
+                fill: {
+                    type: 'solid',
+                    colors: ['#03c3ec'] // Barın dolu kısmının rengi
+                },
+                tooltip: {
+                    enabled: false
+                },
+                stroke: {
+                    lineCap: 'round' // Barın uçlarını yuvarlatma
+                },
+                background: {
+                    enabled: true,
+                    colors: ['#e0e0e0'] // Barın boş kısmının arka plan rengi
+                }
+            };
+
+
+
+            var char0200316 = new ApexCharts(document.querySelector("#chart-S03-E6-02-003-16"), options0200316);
+            char0200316.render();
+            //Alacaklar Borçlar end
+
+            //Vadesi Geçen Alacakların Toplam alacaklara % begin
+
+            var optionVdGecenAlacakTop = {
+                chart: {
+                    type: 'bar',
+                    height: 350,
+                    toolbar: {
+                        show: false
+                    },
+                    sparkline: {
+                        enabled: false
+                    }
+                },
+                series: [{
+                    name: '',
+                    data: @Html.Raw(JsonSerializer.Serialize(Model.ReceivablesAgingChartData.data)) ?? []// Yüzde değerleri
+                }],
+                plotOptions: {
+                    bar: {
+                        horizontal: true, // Yatay barlı grafik
+                        distributed: true, // Her barın farklı renkte olması için
+                        borderRadius: 6,
+                        dataLabels: {
+                            position: 'center' // Yüzdeyi barın ortasına yerleştirir
+                        }
+                    }
+                },
+                colors: ['#1E88E5', '#43A047', '#FB8C00', '#E53935', '#8E24AA', '#00ACC1', '#FDD835'], // Her bar için farklı renkler
+                xaxis: {
+                    max: 100, // Maksimum yüzde değeri
+                    min: 0,   // Minimum yüzde değeri
+                    categories: @Html.Raw(JsonSerializer.Serialize(Model.ReceivablesAgingChartData.name)) ?? [] // Kategoriler
+                },
+                yaxis: {
+                    show: false // Y eksenini ve değerlerini gizler
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: function (val) {
+                        return val + "%"; // Yüzde olarak gösterim
+                    },
+                    style: {
+                        colors: ['#fff'] // Yüzde metni için renk (beyaz)
+                    }
+                }
+            };
+
+            var chartSales = new ApexCharts(document.querySelector("#chart-S03-E6-04-003-42"), optionVdGecenAlacakTop);
+            chartSales.render();
+
+
+            //Vadesi Geçen Alacakların Toplam alacaklara % end
+
+            //Borçlar begin
+
+            var option0400358 = {
+                chart: {
+                    type: 'bar',
+                    height: 350,
+                    toolbar: {
+                        show: false
+                    },
+                    sparkline: {
+                        enabled: false
+                    }
+                },
+                series: [{
+                    name: '',
+                    data: @Html.Raw(JsonSerializer.Serialize(Model.DebtsChartData.data)) ?? []// Yüzde değerleri
+                }],
+                plotOptions: {
+                    bar: {
+                        horizontal: true, // Yatay barlı grafik
+                        distributed: true, // Her barın farklı renkte olması için
+                        borderRadius: 6,
+                        dataLabels: {
+                            position: 'center' // Yüzdeyi barın ortasına yerleştirir
+                        }
+                    }
+                },
+                colors: ['#1E88E5', '#43A047', '#FB8C00', '#E53935', '#8E24AA', '#00ACC1', '#FDD835'], // Her bar için farklı renkler
+                xaxis: {
+                    max: 100, // Maksimum yüzde değeri
+                    min: 0,   // Minimum yüzde değeri
+                    categories: @Html.Raw(JsonSerializer.Serialize(Model.DebtsChartData.name)) ?? [] // Kategoriler
+                },
+                yaxis: {
+                    show: false // Y eksenini ve değerlerini gizler
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: function (val) {
+                        return val + "%"; // Yüzde olarak gösterim
+                    },
+                    style: {
+                        colors: ['#fff'] // Yüzde metni için renk (beyaz)
+                    }
+                }
+            };
+
+            var chart0400358 = new ApexCharts(document.querySelector("#chart-S03-E6-04-003-58"), option0400358);
+            chart0400358.render();
+
+
+            //Borçlar end
+            //Borçlar yapılandırma begin
+
+            var option0600384 = {
+                chart: {
+                    type: 'bar',
+                    height: 350,
+                    toolbar: {
+                        show: false
+                    },
+                    sparkline: {
+                        enabled: false
+                    }
+                },
+                series: [{
+                    name: '',
+                    data: @Html.Raw(JsonSerializer.Serialize(Model.DebtsAgingChartData.data)) ?? []// Yüzde değerleri
+                }],
+                plotOptions: {
+                    bar: {
+                        horizontal: true, // Yatay barlı grafik
+                        distributed: true, // Her barın farklı renkte olması için
+                        borderRadius: 6,
+                        dataLabels: {
+                            position: 'center' // Yüzdeyi barın ortasına yerleştirir
+                        }
+                    }
+                },
+                colors: ['#1E88E5', '#43A047', '#FB8C00', '#E53935', '#8E24AA', '#00ACC1', '#FDD835'], // Her bar için farklı renkler
+                xaxis: {
+                    max: 100, // Maksimum yüzde değeri
+                    min: 0,   // Minimum yüzde değeri
+                    categories: @Html.Raw(JsonSerializer.Serialize(Model.DebtsAgingChartData.name)) ?? [] // Kategoriler
+                },
+                yaxis: {
+                    show: false // Y eksenini ve değerlerini gizler
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: function (val) {
+                        return val + "%"; // Yüzde olarak gösterim
+                    },
+                    style: {
+                        colors: ['#fff'] // Yüzde metni için renk (beyaz)
+                    }
+                }
+            };
+
+            var chart0600384 = new ApexCharts(document.querySelector("#chart-S03-E6-06-003-84"), option0600384);
+            chart0600384.render();
+
+
+            //Borçlar yapılandırma end
+
+            //VADESİ GELMEMİŞ BORÇ-VADESİ GELMEMİŞ ALACAKLAR begin
+            var options0500401 = {
+                chart: {
+                    type: 'line',
+                    height: 350
+                },
+                series: @Html.Raw(JsonSerializer.Serialize(Model.DebtsReceivablesChartData.Data)) ?? [],
+                xaxis: {
+                    categories: @Html.Raw(JsonSerializer.Serialize(Model.DebtsReceivablesChartData.Title)) ?? []// tür
+                },
+                stroke: {
+                    curve: 'smooth' // Çizgilerin yumuşatılması
+                },
+                markers: {
+                    size: 5 // Her veri noktası için işaretçi boyutu
+                },
+                colors: ['#1E88E5', '#FDD835'], // Çizgilerin renkleri
+                tooltip: {
+                    shared: true,
+                    intersect: false,
+                    y: {
+                        formatter: function (val) {
+                            return val.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')  // Tooltip etiketlerini formatlar
+                        }
+                    }
+                },
+                yaxis: {
+                    labels: {
+                        formatter: function (value) {
+                            return value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') ; // Tooltip etiketlerini formatlar
+                        }
+                    },
+                },
+            };
+
+            var chart0500401 = new ApexCharts(document.querySelector("#chart-S03-E6-05-004-01"), options0500401);
+            chart0500401.render();
+
+            //VADESİ GELMEMİŞ BORÇ-VADESİ GELMEMİŞ ALACAKLAR end
+
+            //TAHSİLAT PERFORMANSI begin
+            var options0600601 = {
+                series: [-22074231.16, 36377.7, -562725.87, 19.0,0.0,0.0],
+                chart: {
+                    height: 350,
+                    type: 'radialBar',
+                },
+                plotOptions: {
+                    radialBar: {
+                        dataLabels: {
+                            name: {
+                                fontSize: '22px',
+                            },
+                            value: {
+                                fontSize: '16px',
+                            },
+                            total: {
+                                show: true,
+                                label: 'Total',
+                                formatter: function (w) {
+                                    // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
+                                    return 249
+                                }
+                            }
+                        }
+                    }
+                },
+                labels: ['Banka', 'Kasa', 'M_Çeki', 'Banka','Kasa','M_Çeki'],
+            };
+
+            var chart0600601 = new ApexCharts(document.querySelector("#chart-S03-E6-06-006-01"), options0600601);
+            chart0600601.render();
+            //TAHSİLAT PERFORMANSI end
+
+
+        });
+
+    </script>
+
+}
